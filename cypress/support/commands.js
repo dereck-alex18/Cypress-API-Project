@@ -46,13 +46,15 @@ Cypress.Commands.add('postUser', (jsonBody, failOnStatusCode = true) => {
     });
 });
 
-Cypress.Commands.add('putUser', (jsonBody, userId, userEmail) => {
+Cypress.Commands.add('putUser', (jsonBody, userId, userEmail, failOnStatusCode = true) => {
     jsonBody.email = userEmail;
+    console.log(jsonBody.email);
     cy.request({
         method: 'PUT',
         url: `usuarios/${userId}`,
         body: jsonBody,
-        headers: { 'content-type': 'application/json' }
+        headers: { 'content-type': 'application/json' },
+        failOnStatusCode
     });
 });
 
