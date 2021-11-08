@@ -35,8 +35,6 @@ describe('HTTP request serverest', () => {
         });
     });
 
-    //-------- PLEASE, IMPLEMENT ME!!!!!!!! -----------
-
     it('Should make a PUT request and return 400', () => {
         cy.putUser(body, userId, 'beltrano@qa.com.br', false)
         .then((response) => {
