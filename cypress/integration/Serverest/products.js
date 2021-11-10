@@ -4,6 +4,7 @@ describe('HTTP request serverest', () => {
     const body = {};
     let userToken = ''; // Refactor the way to get token
     let productId = '';
+    let productId201 = '';
     let userId;
     let nonAdminToken;
     it('Should make a GET resquest and return 200', () => {
@@ -67,6 +68,34 @@ describe('HTTP request serverest', () => {
             });
         });
     });
+
+    it('Should make a PUT request and return 200', () => {
+        cy.productBuilder(body);
+        cy.putProduct(body, userToken, productId, 'iPhone12')
+        .then((response) => {
+            expect(response.status).to.equal(200);
+            expect(response.body.message).to.equal('Registro alterado com sucesso');
+        });
+    });
+
+    it('Should make a PUT request and return 201', () => {
+        cy.productBuilder(body);
+        cy.putProduct(body, userToken, 'xxx', 'iPhone13', false)
+        .then((response) => {
+            expect(response.status).to.equal(201);
+            expect(response.body.message).to.equal('Cadastro realizado com sucesso');
+            productId201 = response.body._id
+        });
+    });
+
+    it('Should make a PUT request and return 400', () => {
+        cy.productBuilder(body);
+        cy.putProduct(body, userToken, productId, 'Samsung 60 polegadas', false)
+        .then((response) => {
+            expect(response.status).to.equal(400);
+            expect(response.body.message).to.equal('Já existe produto com esse nome');
+        });
+    });
          
     it('Should make a PUT request and return 401', () => {
         cy.productBuilder(body);
@@ -77,6 +106,14 @@ describe('HTTP request serverest', () => {
         });
     });
 
+    it('Should make a PUT request and return 403', () => {
+        cy.productBuilder(body);
+        cy.putProduct(body, nonAdminToken, productId, 'iPhone12', false)
+        .then((response) => {
+            expect(response.status).to.equal(403);
+            expect(response.body.message).to.equal('Rota exclusiva para administradores');
+        });
+    });
 
     it('Should make a DELETE request and return 200', () => {
         cy.deleteProduct(userToken, productId)
@@ -88,6 +125,7 @@ describe('HTTP request serverest', () => {
 
     after(() => {
         cy.deleteUser(userId);
+        cy.deleteProduct(userToken, productId201);
     });
 });
 

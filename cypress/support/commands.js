@@ -116,7 +116,7 @@ Cypress.Commands.add('postProduct', (jsonBody, authToken, failOnStatusCode = tru
 });
 
 Cypress.Commands.add('putProduct', (jsonBody, authToken, productId, productName, failOnStatusCode = true) => {
-    jsonBody.name = productName;
+    jsonBody.nome = productName;
     cy.request({
         method: 'PUT',
         url: `produtos/${productId}`,
