@@ -36,7 +36,7 @@ describe('HTTP request serverest', () => {
     });
 
     it('Should make a PUT request and return 400', () => {
-        cy.putUser(body, userId, 'beltrano@qa.com.br', false)
+        cy.putUser(body, userId, 'fulano@qa.com', false)
         .then((response) => {
             console.log(`resp invalid put: ${body.email}`);
             expect(response.status).to.equal(400);

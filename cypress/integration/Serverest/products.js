@@ -17,7 +17,7 @@ describe('HTTP request serverest', () => {
     });
 
     it('Should make a POST resquest and return 201', () => {
-        cy.postLogin({email: 'beltrano@qa.com.br', password: 'teste'})
+        cy.postLogin({email: 'fulano@qa.com', password: 'teste'})
         .then(response => {
             userToken = response.body.authorization;
             cy.productBuilder(body);
