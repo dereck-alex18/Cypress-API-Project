@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-describe('Test login feature', () =>{
+describe('Test login endpoint', () =>{
     let body = {};
     let userId
     it('Should make a POST request and return 201', () => {

@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-describe('HTTP request serverest', () => {
+describe('Test product endpoint', () => {
     const body = {};
     let userToken = ''; // Refactor the way to get token
     let productId = '';
