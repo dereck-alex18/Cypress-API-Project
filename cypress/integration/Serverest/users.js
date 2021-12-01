@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-describe('HTTP request serverest', () => {
+describe('Test user endpoint', () => {
     let userId;
     const body = {};
     const ids = [];
