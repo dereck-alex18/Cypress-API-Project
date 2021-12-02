@@ -5,7 +5,8 @@ describe('Test user endpoint', () => {
     const body = {};
     const ids = [];
 
-    it('Should make a GET resquest and return 200', () => {
+    //GET
+    it('Should return users and status 200 to list users', () => {
         cy.getUsers()
         .then((response) => {
             expect(response.body).have.property('usuarios');
@@ -15,7 +16,8 @@ describe('Test user endpoint', () => {
         });
     });
 
-    it('Should make a POST request and return 201', () => {
+    //POST
+    it('Should return successful message and 201 status to register Successfully', () => {
         cy.userBuilder(body); //Custom command
         cy.postUser(body)
         .then((response) => {
@@ -27,7 +29,7 @@ describe('Test user endpoint', () => {
         });
     });
 
-    it('Should make a POST request and return 400', () => {
+    it('Should return fail message and 400 status to already exist a user with this name', () => {
         cy.postUser(body, false)
         .then((response) => {
             expect(response.status).to.equal(400);
@@ -35,8 +37,9 @@ describe('Test user endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 400', () => {
-        cy.putUser(body, userId, 'fulano@qa.com', false)
+    //PUT
+    it('Should return error message and status 400 to email already in use', () => {
+        cy.putUser(body, userId, 'beltrano@qa.com.br', false)
         .then((response) => {
             console.log(`resp invalid put: ${body.email}`);
             expect(response.status).to.equal(400);
@@ -44,7 +47,7 @@ describe('Test user endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 200', () => {
+    it('Should Return Success Message And Status 200 To Update Successfully', () => {
         cy.putUser(body, userId, 'test@test.com')
         .then((response) => {
             expect(response.status).to.equal(200);
@@ -52,7 +55,7 @@ describe('Test user endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 201', () => {
+    it('Should return success message and status 201 to register successfully', () => {
         cy.putUser(body, 'xxx', 'ze@test.com')
         .then((response) => {
             expect(response.status).to.equal(201);
@@ -62,8 +65,8 @@ describe('Test user endpoint', () => {
         });
     });
 
-
-    it('Should make a DELETE request and return 200', () => {
+    //Delete
+    it('Should remove user return success message and status 200 to user deleted successfully', () => {
         cy.deleteUser(userId)
         .then((response) => {
             expect(response.status).to.equal(200);

@@ -3,7 +3,9 @@
 describe('Test login endpoint', () =>{
     let body = {};
     let userId
-    it('Should make a POST request and return 201', () => {
+
+    //Post
+    it('should return success message auth token and status 200 to login successfully', () => {
         cy.userBuilder(body); //Custom command
         cy.postUser(body)
         .then((response) => {
@@ -17,7 +19,7 @@ describe('Test login endpoint', () =>{
         });
     });
 
-    it('Should make a POST request and return 401', () => {
+    it('Should return failure message and status 401 to invalid email or password', () => {
         cy.loginUserBuilder(body); //Custom command
 
         cy.postLogin(body, false)
