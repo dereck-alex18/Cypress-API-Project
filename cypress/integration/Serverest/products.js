@@ -7,7 +7,9 @@ describe('Test product endpoint', () => {
     let productId201 = '';
     let userId;
     let nonAdminToken;
-    it('Should make a GET resquest and return 200', () => {
+
+    //Get
+    it('Should return products and status 200 to list products', () => {
         cy.getAllProducts()
         .then((response) => {
             expect(response.body.quantidade).to.equal(2);
@@ -16,8 +18,9 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a POST resquest and return 201', () => {
-        cy.postLogin({email: 'fulano@qa.com', password: 'teste'})
+    //Post
+    it('Should return successful message and status 201 To register successfully', () => {
+        cy.postLogin({email: 'beltrano@qa.com.br', password: 'teste'})
         .then(response => {
             userToken = response.body.authorization;
             cy.productBuilder(body);
@@ -30,7 +33,7 @@ describe('Test product endpoint', () => {
         });    
     });
 
-    it('Should make a POST resquest and return 400', () => {
+    it('Should return fail message and status 400 to already exist a product with this name', () => {
         cy.productBuilder(body);
         body.nome = 'Logitech MX Vertical';
         cy.postProduct(body, userToken, false)
@@ -41,7 +44,7 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a POST resquest and return 401', () => {
+    it('Should return fail message and status 401 to nonexisting invalid or expired token', () => {
         cy.productBuilder(body);
         cy.postProduct(body, 'xxx', false)
         .then(response => {
@@ -50,7 +53,7 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a POST resquest and return 403', () => {
+    it('Should return fail message and status 403 to exclusive route for admins', () => {
         const user = {}
         cy.userBuilder(user);
         cy.postUser(user)
@@ -69,7 +72,8 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 200', () => {
+    //Put
+    it('Should return success and status 200 to update successfully', () => {
         cy.productBuilder(body);
         cy.putProduct(body, userToken, productId, 'iPhone12')
         .then((response) => {
@@ -78,7 +82,7 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 201', () => {
+    it('Should return success and status 201 Tt register successfully', () => {
         cy.productBuilder(body);
         cy.putProduct(body, userToken, 'xxx', 'iPhone13', false)
         .then((response) => {
@@ -88,7 +92,7 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 400', () => {
+    it('Should return error and status 400 to already exist a product with this name', () => {
         cy.productBuilder(body);
         cy.putProduct(body, userToken, productId, 'Samsung 60 polegadas', false)
         .then((response) => {
@@ -97,7 +101,7 @@ describe('Test product endpoint', () => {
         });
     });
          
-    it('Should make a PUT request and return 401', () => {
+    it('Should return error and status 401 to nonexisting, invalid or expired token', () => {
         cy.productBuilder(body);
         cy.putProduct(body, 'xxx', productId, 'iPhone12', false)
         .then((response) => {
@@ -106,7 +110,7 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a PUT request and return 403', () => {
+    it('Should return error and status 403 to exclusive route for admins', () => {
         cy.productBuilder(body);
         cy.putProduct(body, nonAdminToken, productId, 'iPhone12', false)
         .then((response) => {
@@ -115,11 +119,28 @@ describe('Test product endpoint', () => {
         });
     });
 
-    it('Should make a DELETE request and return 200', () => {
+    //Delete
+    it('Should remove product return success message and status 200 to product deleted successfully', () => {
         cy.deleteProduct(userToken, productId)
         .then((response) => {
             expect(response.status).to.equal(200);
             expect(response.body.message).to.equal('Registro excluído com sucesso');
+        });
+    });
+
+    it('Should not remove product return error message and status 403 to route exclusive for admins', () => {
+        cy.deleteProduct(nonAdminToken, productId201)
+        .then((response) => {
+            expect(response.status).to.equal(403);
+            expect(response.body.message).to.equal('Rota exclusiva para administradores');
+        });
+    });
+
+    it('Should not remove product return error message and status 401 to nonexistent invalid or expired token', () => {
+        cy.deleteProduct('xxx', productId201)
+        .then((response) => {
+            expect(response.status).to.equal(401);
+            expect(response.body.message).to.equal('Token de acesso ausente, inválido, expirado ou usuário do token não existe mais');
         });
     });
 
