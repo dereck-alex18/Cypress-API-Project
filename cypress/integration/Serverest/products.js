@@ -20,7 +20,7 @@ describe('Test product endpoint', () => {
 
     //Post
     it('Should return successful message and status 201 To register successfully', () => {
-        cy.postLogin({email: 'beltrano@qa.com.br', password: 'teste'})
+        cy.postLogin({email: 'fulano@qa.com', password: 'teste'})
         .then(response => {
             userToken = response.body.authorization;
             cy.productBuilder(body);
@@ -129,7 +129,7 @@ describe('Test product endpoint', () => {
     });
 
     it('Should not remove product return error message and status 403 to route exclusive for admins', () => {
-        cy.deleteProduct(nonAdminToken, productId201)
+        cy.deleteProduct(nonAdminToken, productId201, false)
         .then((response) => {
             expect(response.status).to.equal(403);
             expect(response.body.message).to.equal('Rota exclusiva para administradores');
@@ -137,7 +137,7 @@ describe('Test product endpoint', () => {
     });
 
     it('Should not remove product return error message and status 401 to nonexistent invalid or expired token', () => {
-        cy.deleteProduct('xxx', productId201)
+        cy.deleteProduct('xxx', productId201, false)
         .then((response) => {
             expect(response.status).to.equal(401);
             expect(response.body.message).to.equal('Token de acesso ausente, inválido, expirado ou usuário do token não existe mais');

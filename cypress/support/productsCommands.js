@@ -35,7 +35,7 @@ Cypress.Commands.add('putProduct', (jsonBody, authToken, productId, productName,
     });
 });
 
-Cypress.Commands.add('deleteProduct', (authToken, productId) => {
+Cypress.Commands.add('deleteProduct', (authToken, productId, failOnStatusCode = true) => {
     cy.request({
         method: 'DELETE',
         url: `produtos/${productId}`,
@@ -43,6 +43,7 @@ Cypress.Commands.add('deleteProduct', (authToken, productId) => {
         {   'content-type': 'application/json',
             'Authorization': authToken
         },
+        failOnStatusCode
     });
 });
 

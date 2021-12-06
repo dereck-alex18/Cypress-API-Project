@@ -39,7 +39,7 @@ describe('Test user endpoint', () => {
 
     //PUT
     it('Should return error message and status 400 to email already in use', () => {
-        cy.putUser(body, userId, 'beltrano@qa.com.br', false)
+        cy.putUser(body, userId, 'fulano@qa.com', false)
         .then((response) => {
             console.log(`resp invalid put: ${body.email}`);
             expect(response.status).to.equal(400);
