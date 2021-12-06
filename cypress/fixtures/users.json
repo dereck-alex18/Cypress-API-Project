@@ -1,9 +1,16 @@
+[
   {
     "nome": "Thamires Neves",
     "email": "tn@test.com",
     "password": "1234abc",
     "administrador": "false"
+  },
+  {
+    "email": "sicra@test.com",
+    "password": "1234abc"
+   
   }
+]
 
 
 

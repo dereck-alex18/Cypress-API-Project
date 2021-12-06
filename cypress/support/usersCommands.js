@@ -39,10 +39,10 @@ Cypress.Commands.add('deleteUser', userId => {
 });
 
 Cypress.Commands.add('userBuilder', (body) => {
-    cy.fixture('user').then(user => {
-        body.nome = user.nome,
-        body.email = user.email,
-        body.password = user.password,
-        body.administrador = user.administrador
+    cy.fixture('users').then(users => {
+        body.nome = users[0].nome,
+        body.email = users[0].email,
+        body.password = users[0].password,
+        body.administrador = users[0].administrador
     });
 });

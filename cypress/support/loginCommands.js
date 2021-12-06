@@ -11,8 +11,8 @@ Cypress.Commands.add('postLogin', (jsonBody, failOnStatusCode = true) => {
 });
 
 Cypress.Commands.add('loginUserBuilder', (body) => {
-    cy.fixture('invalidUser').then(user => {
-        body.email = user.email,
-        body.password = user.password
+    cy.fixture('users').then(users => {
+        body.email = users[1].email,
+        body.password = users[1].password
     });
 });
