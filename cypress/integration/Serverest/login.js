@@ -1,4 +1,5 @@
 /// <reference types="Cypress" />
+import {successfullLogin, invalidLogin} from '../../helpers/messages';
 
 describe('Test login endpoint', () =>{
     let body = {};
@@ -15,7 +16,7 @@ describe('Test login endpoint', () =>{
         cy.postLogin(body)
         .then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body.message).to.equal('Login realizado com sucesso');
+            expect(response.body.message).to.equal(successfullLogin);
         });
     });
 
@@ -25,7 +26,7 @@ describe('Test login endpoint', () =>{
         cy.postLogin(body, false)
         .then((response) => {
             expect(response.status).to.equal(401);
-            expect(response.body.message).to.equal('Email e/ou senha inválidos');
+            expect(response.body.message).to.equal(invalidLogin);
         });
     });
 

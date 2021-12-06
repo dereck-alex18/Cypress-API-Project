@@ -1,4 +1,10 @@
 /// <reference types="Cypress" />
+import {
+    successfullRegisted, 
+    alreadyRegisteredEmail, 
+    registerChangedSuccessfully, 
+    deletedRegisterSuccessfully
+} from '../../helpers/messages';
 
 describe('Test user endpoint', () => {
     let userId;
@@ -23,7 +29,7 @@ describe('Test user endpoint', () => {
         .then((response) => {
             expect(response.status).to.equal(201);
             expect(response.body).have.property('_id');
-            expect(response.body.message).to.equal('Cadastro realizado com sucesso');
+            expect(response.body.message).to.equal(successfullRegisted);
             userId = response.body._id
             ids.push(userId);
         });
@@ -33,7 +39,7 @@ describe('Test user endpoint', () => {
         cy.postUser(body, false)
         .then((response) => {
             expect(response.status).to.equal(400);
-            expect(response.body.message).to.equal('Este email já está sendo usado');
+            expect(response.body.message).to.equal(alreadyRegisteredEmail);
         });
     });
 
@@ -43,7 +49,7 @@ describe('Test user endpoint', () => {
         .then((response) => {
             console.log(`resp invalid put: ${body.email}`);
             expect(response.status).to.equal(400);
-            expect(response.body.message).to.equal('Este email já está sendo usado');
+            expect(response.body.message).to.equal(alreadyRegisteredEmail);
         });
     });
 
@@ -51,7 +57,7 @@ describe('Test user endpoint', () => {
         cy.putUser(body, userId, 'test@test.com')
         .then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body.message).to.equal('Registro alterado com sucesso');
+            expect(response.body.message).to.equal(registerChangedSuccessfully);
         });
     });
 
@@ -59,7 +65,7 @@ describe('Test user endpoint', () => {
         cy.putUser(body, 'xxx', 'ze@test.com')
         .then((response) => {
             expect(response.status).to.equal(201);
-            expect(response.body.message).to.equal('Cadastro realizado com sucesso');
+            expect(response.body.message).to.equal(successfullRegisted);
             userId = response.body._id
             ids.push(userId);
         });
@@ -70,7 +76,7 @@ describe('Test user endpoint', () => {
         cy.deleteUser(userId)
         .then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body.message).to.equal('Registro excluído com sucesso');
+            expect(response.body.message).to.equal(deletedRegisterSuccessfully);
         });
     });
 

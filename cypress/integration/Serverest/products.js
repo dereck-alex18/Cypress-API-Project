@@ -1,4 +1,12 @@
 /// <reference types="Cypress" />
+import {
+    successfullRegisted, 
+    productAlreadyExist,
+    invalidToken, 
+    adminExclusiveRoute,
+    registerChangedSuccessfully, 
+    deletedRegisterSuccessfully
+} from '../../helpers/messages';
 
 describe('Test product endpoint', () => {
     const body = {};
@@ -26,7 +34,7 @@ describe('Test product endpoint', () => {
             cy.productBuilder(body);
             cy.postProduct(body, userToken)
             .then(response => {
-                expect(response.body.message).to.equal('Cadastro realizado com sucesso');
+                expect(response.body.message).to.equal(successfullRegisted);
                 expect(response.status).to.equal(201);
                 productId = response.body._id;
             });
@@ -38,7 +46,7 @@ describe('Test product endpoint', () => {
         body.nome = 'Logitech MX Vertical';
         cy.postProduct(body, userToken, false)
         .then(response => {
-            expect(response.body.message).to.equal('Já existe produto com esse nome');
+            expect(response.body.message).to.equal(productAlreadyExist);
             expect(response.status).to.equal(400);
             
         });
@@ -48,7 +56,7 @@ describe('Test product endpoint', () => {
         cy.productBuilder(body);
         cy.postProduct(body, 'xxx', false)
         .then(response => {
-            expect(response.body.message).to.equal('Token de acesso ausente, inválido, expirado ou usuário do token não existe mais');
+            expect(response.body.message).to.equal(invalidToken);
             expect(response.status).to.equal(401);   
         });
     });
@@ -65,7 +73,7 @@ describe('Test product endpoint', () => {
                 cy.productBuilder(body);
                 cy.postProduct(body, nonAdminToken, false)
                 .then(response => {
-                    expect(response.body.message).to.equal('Rota exclusiva para administradores');
+                    expect(response.body.message).to.equal(adminExclusiveRoute);
                     expect(response.status).to.equal(403);
                 });
             });
@@ -78,7 +86,7 @@ describe('Test product endpoint', () => {
         cy.putProduct(body, userToken, productId, 'iPhone12')
         .then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body.message).to.equal('Registro alterado com sucesso');
+            expect(response.body.message).to.equal(registerChangedSuccessfully);
         });
     });
 
@@ -87,7 +95,7 @@ describe('Test product endpoint', () => {
         cy.putProduct(body, userToken, 'xxx', 'iPhone13', false)
         .then((response) => {
             expect(response.status).to.equal(201);
-            expect(response.body.message).to.equal('Cadastro realizado com sucesso');
+            expect(response.body.message).to.equal(successfullRegisted);
             productId201 = response.body._id
         });
     });
@@ -97,7 +105,7 @@ describe('Test product endpoint', () => {
         cy.putProduct(body, userToken, productId, 'Samsung 60 polegadas', false)
         .then((response) => {
             expect(response.status).to.equal(400);
-            expect(response.body.message).to.equal('Já existe produto com esse nome');
+            expect(response.body.message).to.equal(productAlreadyExist);
         });
     });
          
@@ -106,7 +114,7 @@ describe('Test product endpoint', () => {
         cy.putProduct(body, 'xxx', productId, 'iPhone12', false)
         .then((response) => {
             expect(response.status).to.equal(401);
-            expect(response.body.message).to.equal('Token de acesso ausente, inválido, expirado ou usuário do token não existe mais');
+            expect(response.body.message).to.equal(invalidToken);
         });
     });
 
@@ -115,7 +123,7 @@ describe('Test product endpoint', () => {
         cy.putProduct(body, nonAdminToken, productId, 'iPhone12', false)
         .then((response) => {
             expect(response.status).to.equal(403);
-            expect(response.body.message).to.equal('Rota exclusiva para administradores');
+            expect(response.body.message).to.equal(adminExclusiveRoute);
         });
     });
 
@@ -124,7 +132,7 @@ describe('Test product endpoint', () => {
         cy.deleteProduct(userToken, productId)
         .then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body.message).to.equal('Registro excluído com sucesso');
+            expect(response.body.message).to.equal(deletedRegisterSuccessfully);
         });
     });
 
@@ -132,7 +140,7 @@ describe('Test product endpoint', () => {
         cy.deleteProduct(nonAdminToken, productId201, false)
         .then((response) => {
             expect(response.status).to.equal(403);
-            expect(response.body.message).to.equal('Rota exclusiva para administradores');
+            expect(response.body.message).to.equal(adminExclusiveRoute);
         });
     });
 
@@ -140,7 +148,7 @@ describe('Test product endpoint', () => {
         cy.deleteProduct('xxx', productId201, false)
         .then((response) => {
             expect(response.status).to.equal(401);
-            expect(response.body.message).to.equal('Token de acesso ausente, inválido, expirado ou usuário do token não existe mais');
+            expect(response.body.message).to.equal(invalidToken);
         });
     });
 
